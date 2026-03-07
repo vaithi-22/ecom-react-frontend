@@ -45,6 +45,11 @@ export default function Navbar() {
                                 Register
                             </Link>
                         </li>
+                        <li className="nav-item">
+                            <Link href="/register-1" className={`nav-link ${location === '/register-1' ? 'active' : ''}`}>
+                                Register-1
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             </div>
