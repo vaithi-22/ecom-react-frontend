@@ -2,6 +2,8 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import * as Yup from "yup";
+import {useFlashMessage} from "./FlashMessageStore";
+import { useLocation } from "wouter";
 
 
 
@@ -20,7 +22,7 @@ function RegisterPage() {
 
 
     const [marketingPreferences, setMarketingPreferences] = useState([]);
-    const [,setLocation]=useState();
+    const [_,setLocation]=useLocation();
 
     useEffect(() => {
         const fetchMarketingPreferences = async () => {
@@ -41,20 +43,26 @@ function RegisterPage() {
         "country": ""
     }
 
+    const { showMessage } = useFlashMessage();
+
     // handle the submission
 
     const handleSubmit = (values, formikHelpers) => {
         try {
             console.log(values);
-            setLocation("/");
+            showMessage('Registration successful!', 'success');
+            
         } catch (error) {
             console.error('Registration failed:', error.response?.data || error.message);
+             showMessage('Registration failed. Please try again.', 'error');
         } finally {
             //simulate 5 sec wait
-            setTimeout(function () {
-                console.log("form processing successfully");
-                formikHelpers.setSubmitting(false)
-            }, 5000)
+            // setTimeout(function () {
+            //     console.log("form processing successfully");
+            //     formikHelpers.setSubmitting(false)
+            // }, 5000)
+            formikHelpers.setSubmitting(false);
+            setLocation("/");
         }
     };
 
