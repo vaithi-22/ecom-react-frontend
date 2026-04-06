@@ -15,6 +15,7 @@
     "jotai": "^2.18.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "seamless-immutable": "^7.1.4",
     "wouter": "^3.9.0",
     "yup": "^1.7.1"
   },

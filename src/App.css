@@ -9,4 +9,5 @@
     left: 10px;
     width: calc(99vw - 20px);
     z-index: 100;
+    text-align: center;
 }

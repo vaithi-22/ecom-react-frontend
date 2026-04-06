@@ -2,12 +2,16 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import * as Yup from "yup";
-import {useFlashMessage} from "./FlashMessageStore";
+import { useFlashMessage } from "./FlashMessageStore";
 import { useLocation } from "wouter";
 
 
 
 function RegisterPage() {
+
+    const [marketingPreferences, setMarketingPreferences] = useState([]);
+    const [_, setLocation] = useLocation();
+    const { showMessage } = useFlashMessage();
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Name is required'),
@@ -21,12 +25,11 @@ function RegisterPage() {
     });
 
 
-    const [marketingPreferences, setMarketingPreferences] = useState([]);
-    const [_,setLocation]=useLocation();
+
 
     useEffect(() => {
         const fetchMarketingPreferences = async () => {
-            const response = await axios.get('/marketingPreferences.json');
+            const response = await axios.get("/marketingPreferences.json");
             setMarketingPreferences(response.data);
         }
         fetchMarketingPreferences();
@@ -40,31 +43,26 @@ function RegisterPage() {
         "password": "",
         "confirmPassword": "",
         "salutation": "",
-        "country": ""
+        "country": "",
+        "marketingPreferences": ""
     }
-
-    const { showMessage } = useFlashMessage();
 
     // handle the submission
 
-    const handleSubmit = (values, formikHelpers) => {
+    const handleSubmit = async (values, formikHelpers) => {
+        console.log("values from the form =", values);
         try {
-            console.log(values);
-            showMessage('Registration successful!', 'success');
-            
-        } catch (error) {
-            console.error('Registration failed:', error.response?.data || error.message);
-             showMessage('Registration failed. Please try again.', 'error');
-        } finally {
-            //simulate 5 sec wait
-            // setTimeout(function () {
-            //     console.log("form processing successfully");
-            //     formikHelpers.setSubmitting(false)
-            // }, 5000)
+            const response = await axios.post(import.meta.env.VITE_API_URL + "/api/users/register", values);
+            console.log("Form has been proceeded successfully");
             formikHelpers.setSubmitting(false);
+            showMessage('Registration successful!', 'success');
             setLocation("/");
+
+        } catch (error) {
+            showMessage('Registration failed. Please try again.', 'danger');
         }
-    };
+    }
+
 
 
 
@@ -149,20 +147,20 @@ function RegisterPage() {
                                         component="div"
                                         className="text-danger"
                                     />
-                                    {/*marketing perferences */}
+                                    {/*marketing preferences */}
                                     <div className="mb-3">
-                                        <label className="form-label">Marketing Perferences :</label>
+                                        <label className="form-label">Marketing preferences :</label>
                                         {
-                                            marketingPreferences.map((perference) => {
+                                            marketingPreferences.map((preference) => {
                                                 return (
-                                                    <div className="form-check" key={perference.id}>
+                                                    <div className="form-check" key={preference.id}>
                                                         <Field type="checkbox"
-                                                            name="marketingPerferences"
-                                                            id={"marketing-preferences-" + perference.id}
-                                                            value={String(perference.id)}
+                                                            name="marketingPreferences"
+                                                            id={"marketing-preferences-" + preference.id}
+                                                            value={String(preference.id)}
                                                             className="form-check-input"
                                                         />
-                                                        <label className="form-check-label" htmlFor={"marketing-preferences-" + perference.id}>{perference.name}</label>
+                                                        <label className="form-check-label" htmlFor={"marketing-preferences-" + preference.id}>{preference.preference}</label>
                                                     </div>
 
                                                 )
@@ -178,6 +176,7 @@ function RegisterPage() {
                                             id="country"
                                             name="country"
                                         >
+                                            <option value=" ">Select Country</option>
                                             <option value="sg">Singapore</option>
                                             <option value="my">Malaysia</option>
                                             <option value="th">Thailand</option>
@@ -206,9 +205,6 @@ function RegisterPage() {
             </div>
         </>
     )
-
-
-
 }
 
 export default RegisterPage;

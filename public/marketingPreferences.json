@@ -1,18 +1,23 @@
 [
   {
     "id": 1,
-    "name": "Email Marketing"
+    "preference": "Email Marketing"
   },
   {
     "id": 2,
-    "name": "SMS Marketing"
+    "preference": "SMS Marketing"
   },
   {
     "id": 3,
-    "name": "Newsletter"
+    "preference": "Newsletter"
   },
   {
     "id": 4,
-    "name": "Product Updates"
+    "preference": "Product Updates"
+  },
+  {
+    "id": 5,
+    "preference": "AI Product Updates"
   }
+
 ]

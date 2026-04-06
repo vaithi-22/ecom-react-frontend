@@ -11,9 +11,12 @@ const ProductCard = (props) => {
         <div className="card">
             <img src={props.imageUrl} alt={props.productName} className="card-img-top" />
             <div className="card-body">
-                <h2 className="card-title">{props.name}</h2>
+                <h4 className="card-title">{props.productName}</h4>
                 <p className="card-text">{props.price}</p>
-                <button className="btn btn-primary" onClick={props.handleAddToCart}>Add to Cart</button>
+                <a href="#" className="btn btn-primary" onClick={() => {
+                    console.log("added to cart");
+                    props.onAddToCart();
+                }}>Add to Cart</a>
             </div>
 
         </div>
